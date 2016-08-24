@@ -15,14 +15,6 @@ use POSIX qw(setlocale LC_TIME strftime);
 use Scalar::Util qw(reftype);
 use WebService::Amazon::Signature::v4;
 
-has signature => (
-    is => 'lazy',
-);
-
-has scope => (
-    is => 'lazy',
-);
-
 has ua => (
     is => 'lazy',
 );
@@ -71,7 +63,7 @@ has json => (
     },
 );
 
-sub _build_signature {
+sub signature {
     my ($self) = @_;
     my $locale = setlocale(LC_TIME);
     setlocale(LC_TIME, "C");
@@ -84,7 +76,7 @@ sub _build_signature {
     $v4;
 }
 
-sub _build_scope {
+sub scope {
     my ($self) = @_;
     join '/', strftime('%Y%m%d', gmtime), $self->region, qw(dynamodb aws4_request);
 }
